@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Persona, Role, Propietario
+from .models import People, Role, Owner
 
-admin.site.register(Persona)
+admin.site.register(People)
 admin.site.register(Role)
-admin.site.register(Propietario)
+admin.site.register(Owner)
