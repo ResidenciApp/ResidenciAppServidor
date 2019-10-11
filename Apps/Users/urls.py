@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import *
+from .views import PeopleView, RoleView, OwnerView
 from rest_framework import routers
 
 """
@@ -10,13 +10,13 @@ para optener y guardar usuarios en el servidor
 router = routers.DefaultRouter()
 
 # api/v1/users/people/
-router.register('people', PersonaView)
+router.register('people', PeopleView, base_name='people')
 
 # api/v1/users/role/
-router.register('role', RoleView)
+router.register('role', RoleView, base_name='role')
 
 # api/v1/users/owner/
-router.register('owner', PropietarioView)
+router.register('owner', OwnerView, base_name='owner')
 
 
 urlpatterns = [

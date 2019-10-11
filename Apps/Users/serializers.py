@@ -1,11 +1,11 @@
-from .models import Persona, Role, Propietario
+from .models import People, Role, Owner
 from rest_framework import serializers
 
 
-class PropietarioSerializers(serializers.ModelSerializer):
+class OwnerSerializers(serializers.ModelSerializer):
     class Meta:
         # Modelo al que hace referencia
-        model = Propietario
+        model = Owner
 
         # Que campos quiero visualizar
         fields = (
@@ -24,13 +24,14 @@ class RoleSerializers(serializers.ModelSerializer):
         )
 
 
-class PersonaSerializers(serializers.ModelSerializer):
+class PeopleSerializers(serializers.ModelSerializer):
     role = RoleSerializers(read_only=True)
-    owner = PropietarioSerializers(read_only=True)
+    
+    owner = OwnerSerializers(read_only=True)
 
     class Meta:
         # Modelo al que hace referencia
-        model = Persona
+        model = People
 
         # Que campos quiero visualizar
         fields = ('__all__')

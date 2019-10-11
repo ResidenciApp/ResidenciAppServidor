@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Propietario(models.Model):
+class Owner(models.Model):
     documentNumber = models.IntegerField()
 
     DOCUMENT_TYPE_CHOICES = [
@@ -30,7 +30,7 @@ class Role(models.Model):
         return '{}'.format(self.name)
 
 
-class Persona(models.Model):
+class People(models.Model):
     name = models.CharField(max_length=63)
     lastName = models.CharField(max_length=63)
     age = models.IntegerField()
@@ -42,7 +42,7 @@ class Persona(models.Model):
 
     # PK
     role = models.ForeignKey(Role, null=False, blank=False, on_delete=models.CASCADE)
-    owner = models.OneToOneField(Propietario, null=True, blank=True, on_delete=models.CASCADE)
+    owner = models.OneToOneField(Owner, null=True, blank=True, on_delete=models.CASCADE)
 
     SEX_CHOICES = [
         ('M', 'Masculino'),
