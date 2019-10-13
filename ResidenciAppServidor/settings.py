@@ -39,9 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -111,6 +113,30 @@ REST_FRAMEWORK = {
     # Configuración para que el tamaño de la pagina sea de n=? elementos
     'PAGE_SIZE': 10
 }
+
+# CORS Configurations
+# https://medium.com/@zoltankohalmy/react-and-django-57f949b0f012
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+# Cuando la app en Producción
+# CORS_ORIGIN_WHITELIST = (
+#    'localhost:3000',
+# )
+
+# CORS_ORIGIN_ALLOW_ALL: Cuando la app esta en Desarrollo
+CORS_ORIGIN_ALLOW_ALL = True
+
+CSRF_COOKIE_NAME = "csrftoken"
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
