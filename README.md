@@ -6,6 +6,7 @@
 $ pip install djangorestframework
 $ pip install Django
 $ pip install psycopg2
+$ pip install django-cors-headers
 ```
 
 ### Crear una App

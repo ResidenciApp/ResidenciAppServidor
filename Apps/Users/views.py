@@ -35,6 +35,8 @@ class PeopleView(viewsets.ModelViewSet):
 
         data = request.data
 
+        # TODO: Encriptar Contraseña
+
         
         if data['role'] == 1:
             # Registrar Usuario
