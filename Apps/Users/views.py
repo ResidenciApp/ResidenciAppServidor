@@ -62,7 +62,13 @@ class PeopleView(viewsets.ModelViewSet):
             # id_role=3,   ==> Propietario
             
             role = Role.objects.get(id=data['role'])
-            owner = Owner.objects.get(id=data['owner'])
+            
+            owner = Owner(
+                documentNumber=data['documentNumber'],
+                documentType=data['documentType']
+            )
+
+            owner.save()
 
             obj = People(
                 name=data['name'],
