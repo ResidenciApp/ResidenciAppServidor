@@ -26,3 +26,9 @@ $ python manage.py makemigrations
 ```console
 $ python manage.py createsuperuser
 ```
+
+### Clonar el repositorio con el branch 'develop'
+
+```console
+$ git clone --single-branch --branch develop https://github.com/lmbaeza/ResidenciAppServidor.git
+```
