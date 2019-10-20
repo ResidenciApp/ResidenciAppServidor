@@ -30,15 +30,18 @@ class Role(models.Model):
         return '{}'.format(self.name)
 
 
-class People(models.Model):
-    name = models.CharField(max_length=63)
-    lastName = models.CharField(max_length=63)
+from django.contrib.auth.models import User
+
+class People(User):
+    # Hereda los Siguiente Atributos de el modelo User
+    # username
+    # first_name
+    # last_name
+    # password
+    # email
+
     age = models.IntegerField()
-    nickname = models.CharField(max_length=31)
-    password = models.CharField(max_length=255)
     avatar = models.CharField(max_length=255)
-    mail = models.EmailField(max_length=255)
-    token = models.CharField(max_length=255)
 
     # PK
     role = models.ForeignKey(Role, null=False, blank=False, on_delete=models.CASCADE)

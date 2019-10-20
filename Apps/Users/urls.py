@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import PeopleView, RoleView, OwnerView
+from .views import PeopleView, RoleView, OwnerView, TokenView
 from rest_framework import routers
 
 """
@@ -17,6 +17,9 @@ router.register('role', RoleView, base_name='role')
 
 # api/v1/users/owner/
 router.register('owner', OwnerView, base_name='owner')
+
+# api/v1/users/api-token-auth/
+router.register('api-token-auth', TokenView, base_name='api-token-auth')
 
 
 urlpatterns = [

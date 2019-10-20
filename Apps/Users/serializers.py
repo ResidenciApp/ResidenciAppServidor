@@ -1,5 +1,6 @@
 from .models import People, Role, Owner
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 
 
 class OwnerSerializers(serializers.ModelSerializer):
@@ -34,4 +35,9 @@ class PeopleSerializers(serializers.ModelSerializer):
         model = People
 
         # Que campos quiero visualizar
+        fields = ('__all__')
+
+class TokenSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Token
         fields = ('__all__')
