@@ -38,87 +38,101 @@ class PeopleView(viewsets.ModelViewSet):
         # {
         #   'name': 'Luis Miguel', 'lastName': 'Baez Aponte', 'age': 20,
         #   'nickname': 'lmbaeza', 'password': 'admin', 'avatar': 'avatar',
-        #   'mail': 'lmbaeza@unal.edu.co', 'token': 'hash', 'role': 1, 'sex': 'M'
+        #   'mail': 'lmbaeza@unal.edu.co', 'token': 'hash', 'role': 1, 'sex': 'M',
+        #   'documentNumber': 1032452654, 'documentType': 'CC'
         # }
 
         data = request.data
 
+        userCount = User.objects.filter(username=data.get('nickname')).count()
+
+        # Verificar que el 'username' no este registrado en la base de datos
+        # Si 'userCount' tiene algun registro significa que el 'username' ya existe
+
+
+        if userCount != 0:
+            print("True")
+            return Response({'status': 400, 'message': 'USERNAME_ALREADY_EXISTS'})
         
-        if data['role'] == 1:
+        
+        if data.get('role') == 1:
             # Registrar Usuario
             # id_role=1,  ==> Usuario
-            
 
-            role = Role.objects.get(id=data['role'])
-            
-            # Registramos la persona con el role Usuario
+            role = Role.objects.get(id=data.get('role'))
+
+            user = User(
+                username=data.get('nickname'),
+                is_superuser=False,
+                first_name=data.get('name'),
+                last_name=data.get('lastName'),
+                email=data.get('mail'),
+                is_staff=False,
+                is_active=False
+            )
+            # Se encripta la contraseña
+            user.set_password(data.get('password'))
+
+            user.save()
+
             obj = People(
                 age=data.get('age'),
                 avatar=data.get('avatar'),
                 role=role,
-                sex=data.get('sex')
+                sex=data.get('sex'),
+                user=user
             )
+
             obj.save()
-
-            user = User.objects.filter(id=obj.id)
-            user = user[0]
-
-            user.username=data.get('nickname')
-            user.is_superuser=False
-            user.first_name=data.get('name')
-            user.last_name=data.get('lastName')
-            user.email=data.get('mail')
-            user.is_staff=False
-            user.is_active=False
-
-            # Se encripta la contraseña
-            user.set_password(data.get('password'))
-
-            # Guardamos los datos en la DB
-            user.save()
            
-        elif data['role'] == 3:
+        elif data.get('role') == 3:
             # Registar Propietario
             # id_role=3,   ==> Propietario
 
-            # Registramos el Propietario
+            # Crear el registro del Propietario en la BD
             owner = Owner(
                 documentNumber=data.get('documentNumber'),
                 documentType=data.get('documentType')
             )
             owner.save()
             
+            # Buscar el Objeto del 'Role' que va a tener el nuevo propietario
             role = Role.objects.get(id=data.get('role'))
 
-            # Asociamos el Propietario con la entidad Persona
+            # Crear el registro del Usuario Asociado al Propietario
+            user = User(
+                username=data.get('nickname'),
+                is_superuser=False,
+                first_name=data.get('name'),
+                last_name=data.get('lastName'),
+                email=data.get('mail'),
+                is_staff=False,
+                is_active=False
+            )
+
+            # Se encripta la contraseña
+            user.set_password(data.get('password'))
+
+            # Guardar Registro User
+            user.save()
+            
+            # Crear registro de Persona asociado al Propietario y Usuario
             obj = People(
                 age=data.get('age'),
                 avatar=data.get('avatar'),
                 role=role,
                 owner=owner,
-                sex=data.get('sex')
+                sex=data.get('sex'),
+                user=user
             )
+
+            # Guardar registro de la nueva persona
             obj.save()
-
-            user = User.objects.filter(id=obj.id)
-            user = user[0]
-
-            user.username=data.get('nickname')
-            user.is_superuser=False
-            user.first_name=data.get('name')
-            user.last_name=data.get('lastName')
-            user.email=data.get('mail')
-            user.is_staff=False
-            user.is_active=False
-
-            # Se encripta la contraseña
-            user.set_password(data.get('password'))
-
-            # Guardamos los datos en la DB
-            user.save()
         else:
-            return Response({'status': 400, 'message': 'BAD REQUEST'}, status=status.HTTP_400_BAD_REQUEST)
+            # Cuando el role no coincide ni con Usuario ni Propietarios
+            return Response({'status': 400, 'message': 'BAD_REQUEST'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Enviamos una respuesta satisfactoria cuando el registro fué creado
         return Response({'status': 201, 'message': 'OK'},status=status.HTTP_201_CREATED)
 
 
