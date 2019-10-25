@@ -8,7 +8,8 @@ from django.contrib.auth import authenticate
 from django.db.utils import IntegrityError
 
 from .models import People, Role, Owner
-from .serializers import PeopleSerializers, RoleSerializers, OwnerSerializers, TokenSerializers
+from .serializers import PeopleSerializers, RoleSerializers, OwnerSerializers
+from .serializers import TokenSerializers, UserSerializers
 from .permission import IsUser
 
 
@@ -54,7 +55,7 @@ class PeopleView(viewsets.ModelViewSet):
             print("True")
             return Response({'status': 400, 'message': 'USERNAME_ALREADY_EXISTS'})
         
-        
+
         if data.get('role') == 1:
             # Registrar Usuario
             # id_role=1,  ==> Usuario
@@ -134,6 +135,11 @@ class PeopleView(viewsets.ModelViewSet):
 
         # Enviamos una respuesta satisfactoria cuando el registro fué creado
         return Response({'status': 201, 'message': 'OK'},status=status.HTTP_201_CREATED)
+
+
+class UserView(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializers
 
 
 class TokenView(viewsets.ModelViewSet):
