@@ -32,14 +32,16 @@ class Role(models.Model):
 
 from django.contrib.auth.models import User
 
-class People(User):
+# https://django.readthedocs.io/en/latest/topics/auth/customizing.html#extending-the-existing-user-model
+
+class People(models.Model):
     # Hereda los Siguiente Atributos de el modelo User
     # username
     # first_name
     # last_name
     # password
     # email
-
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
     age = models.IntegerField()
     avatar = models.CharField(max_length=255)
 
