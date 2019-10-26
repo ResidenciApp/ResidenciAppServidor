@@ -1,12 +1,17 @@
+# Django Rest Framework
 from rest_framework import generics, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from django.db.utils import IntegrityError
 
+# Django
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, logout
+from django.db.utils import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
+
+# Local Files
 from .models import People, Role, Owner
 from .serializers import PeopleSerializers, RoleSerializers, OwnerSerializers
 from .serializers import TokenSerializers, UserSerializers
@@ -144,14 +149,15 @@ class UserView(viewsets.ModelViewSet):
     serializer_class = UserSerializers
 
 
-class TokenView(viewsets.ModelViewSet):
+class TokenView(viewsets.ViewSet):
     queryset = Token.objects.all()
     serializer_class = TokenSerializers
 
-    # Pedir un Token
+    # Pedir un Token con un Usuario
     # POST: api/v1/users/api-token-auth/
     def create(self, request):
 
+        # Verificar que el usuario haya enviado el 'username' y 'password'
         if request.data.get('username') and request.data.get('password'):
             try:
                 # Se realiza el proceso de Autenticación
@@ -171,8 +177,8 @@ class TokenView(viewsets.ModelViewSet):
 
                     # Envia el Token al Cliente
                     return Response(
-                        {'status': 201, 'message': 'OK' ,'Token': token.key}, 
-                        status=status.HTTP_201_CREATED
+                        {'status': 200, 'message': 'OK' ,'Token': token.key}, 
+                        status=status.HTTP_200_OK
                     )
                 else:
                     # si el metodo authenticate(...) retorna None
@@ -198,5 +204,49 @@ class TokenView(viewsets.ModelViewSet):
             # O la contraseña por tal motivo no se puede autenticar
             return Response(
                 {'status': 400,'message': 'USERNAME_OR_PASSWORD_IS_NONE'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class TokenLogOutView(viewsets.ViewSet):
+    queryset = Token.objects.all()
+    serializer_class = TokenSerializers
+
+    # Eliminar Token y Salir de la Sesión
+    # POST: api/v1/users/api-token-logout/
+    def create(self, request):
+        # Si las credenciales de autenticación enviadas son correctas
+        # entonces 'request.user' tiene un objeto de tipo 'User'
+
+        isThereUser = False
+        user = None
+
+        if request.data.get('headers') and request.data.get('headers').get('Authorization'):
+            tokenKey = request.data.get('headers').get('Authorization').split(' ')[1]
+            token = Token.objects.get(key=tokenKey)
+            user = User.objects.get(pk=token.user_id)
+            
+            if user is not None:
+                isThereUser = True
+
+        if isThereUser:
+            try:
+                # Eliminar la sesión el la BB
+                user.auth_token.delete()
+            except (AttributeError, ObjectDoesNotExist):
+                pass
+            
+            # Cerrar Sesión
+            logout(request)
+
+            # Respuesta Exitosa
+            return Response(
+                {'status': 200,'message': "LOGOUT_WAS_SUCCESSFUL"},
+                status=status.HTTP_200_OK
+            )
+        
+        # Respuesta Fallida
+        return Response(
+                {'status': 400,'message': "LOGOUT_DONT_WAS_SUCCESSFUL"},
                 status=status.HTTP_400_BAD_REQUEST
             )

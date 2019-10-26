@@ -8,7 +8,7 @@ class IsUser(permissions.BasePermission):
     def has_permission(self, request, view):
         
         if isinstance(request.user, User):
-            user = People.objects.select_related("user_ptr").filter(username=request.user.username)
+            user = People.objects.select_related("user").filter(username=request.user.username)
             user = user[0]
             if str(user.role)== 'Usuario':
                 return True
@@ -22,7 +22,7 @@ class IsOwner(permissions.BasePermission):
     def has_permission(self, request, view):
         
         if isinstance(request.user, User):
-            user = People.objects.select_related("user_ptr").filter(username=request.user.username)
+            user = People.objects.select_related("user").filter(username=request.user.username)
             user = user[0]
             if str(user.role)== 'Propietario':
                 return True
@@ -36,7 +36,7 @@ class IsAdministrator(permissions.BasePermission):
     def has_permission(self, request, view):
         
         if isinstance(request.user, User):
-            user = People.objects.select_related("user_ptr").filter(username=request.user.username)
+            user = People.objects.select_related("user").filter(username=request.user.username)
             user = user[0]
             if str(user.role)== 'Administrador':
                 return True
@@ -50,7 +50,7 @@ class IsUserOrOwner(permissions.BasePermission):
     def has_permission(self, request, view):
         
         if isinstance(request.user, User):
-            user = People.objects.select_related("user_ptr").filter(username=request.user.username)
+            user = People.objects.select_related("user").filter(username=request.user.username)
             user = user[0]
             if str(user.role)== 'Usuario' or str(user.role) == 'Propietario':
                 return True
