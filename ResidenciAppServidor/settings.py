@@ -111,8 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Rest Framework
 
 REST_FRAMEWORK = {
-    # Configuración para que el tamaño de la pagina sea de n=? elementos
-    'PAGE_SIZE': 10,
+    # Configuración de Autenticación
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication'
     ]
