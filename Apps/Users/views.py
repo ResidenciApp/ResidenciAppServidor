@@ -250,3 +250,33 @@ class TokenLogOutView(viewsets.ViewSet):
                 {'status': 400,'message': "LOGOUT_DONT_WAS_SUCCESSFUL"},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+class TokenToRoleView(viewsets.ViewSet):
+
+    # El cliente envia un token y este metodo responde con el role
+    # del usuario al que pertenece el token
+    # POST: api/v1/users/token-role/
+    def create(self, request):
+        if request.data.get('headers') and request.data.get('headers').get('Authorization'):
+            tokenKey = request.data.get('headers').get('Authorization').split(' ')[1]
+            token = Token.objects.get(key=tokenKey)
+            user = User.objects.get(pk=token.user_id)
+
+            people = People.objects.select_related("user").filter(user_id=user.id)
+            people = people[0]
+
+            if people is not None:
+                return Response(
+                    {
+                        'status': 200,'message': "OK",
+                        'role_name': people.role.name,
+                        'role_id': people.role.id
+                    },
+                    status=status.HTTP_200_OK
+                )
+
+        return Response(
+            {'status': 400,'message': "HTTP_400_BAD_REQUEST"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+        
