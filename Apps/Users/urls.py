@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .views import PeopleView, RoleView, OwnerView
-from .views import TokenView, TokenLogOutView, UserView
+from .views import TokenView, TokenLogOutView, UserView, TokenToRoleView
 from rest_framework import routers
 
 
@@ -27,6 +27,9 @@ router.register('api-token-auth', TokenView, base_name='api-token-auth')
 
 # api/v1/users/api-token-logout/
 router.register('api-token-logout', TokenLogOutView, base_name='api-token-logout')
+
+# api/v1/users/token-role/
+router.register('token-role', TokenToRoleView, base_name='token-role')
 
 urlpatterns = [
     # api/v1/users/

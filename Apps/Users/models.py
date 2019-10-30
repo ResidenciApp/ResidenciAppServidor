@@ -62,4 +62,5 @@ class People(models.Model):
     )
 
     def __str__(self):
-        return '{} {}'.format(self.name, self.lastName)
+        user = User.objects.get(pk=int(self.user.id))
+        return '{} {}'.format(user.first_name, user.last_name)
