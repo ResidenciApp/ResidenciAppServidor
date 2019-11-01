@@ -270,7 +270,8 @@ class TokenToRoleView(viewsets.ViewSet):
                     {
                         'status': 200,'message': "OK",
                         'role_name': people.role.name,
-                        'role_id': people.role.id
+                        'role_id': people.role.id,
+                        'username': user.username
                     },
                     status=status.HTTP_200_OK
                 )
