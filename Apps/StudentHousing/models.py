@@ -1,6 +1,7 @@
 from django.db import models
 from Apps.Users.models import People
 
+from Apps.Users.models import Owner
 class ResidencePublication(models.Model):
     name = models.CharField(max_length=255)
     photo = models.CharField(max_length=255)
@@ -12,9 +13,13 @@ class ResidencePublication(models.Model):
     # de la App 'Location' Hacer las relaciones
     neighborhood = models.CharField(max_length=255)
     locality = models.CharField(max_length=16)
+<<<<<<< HEAD
+    owner = models.ForeignKey(Owner, null=False, blank=False, on_delete=models.CASCADE)
+=======
 
     # Hacer la relación ForeignKey con Owner de la App Users
     owner = models.CharField(max_length=255)
+>>>>>>> 5db6f7b558f15ab7fca2f716b3fbe5be2b527d75
 
 
 class Comment(models.Model):
