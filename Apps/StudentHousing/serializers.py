@@ -21,3 +21,23 @@ class ServiceSerializers(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = ('__all__')
+
+class NotificationSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ('__all__')
+
+class ReportSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields = ('__all__')
+
+class MessageSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('__all__')
+
+class PromotionSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Promotion
+        fields = ('__all__')

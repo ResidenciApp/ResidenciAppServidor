@@ -19,3 +19,19 @@ class QualificationView(viewsets.ModelViewSet):
 class ServiceView(viewsets.ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializers
+
+class NotificationView(viewsets.ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializers
+
+class ReportView(viewsets.ModelViewSet):
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializers
+
+class MessageView(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializers
+
+class PromotionView(viewsets.ModelViewSet):
+    queryset = Promotion.objects.all()
+    serializer_class = PromotionSerializers

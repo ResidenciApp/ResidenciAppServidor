@@ -16,6 +16,18 @@ router.register('qualification', QualificationView, base_name='qualification')
 # api/v1/users/service/
 router.register('service', ServiceView, base_name='service')
 
+# api/v1/users/notification/
+router.register('notification', NotificationView, base_name='notification')
+
+# api/v1/users/message/
+router.register('message', MessageView, base_name='message')
+
+# api/v1/users/report/
+router.register('report', ReportView, base_name='report')
+
+# api/v1/users/promotion/
+router.register('promotion', PromotionView, base_name='promotion')
+
 urlpatterns = [
     # api/v1/users/
     path('', include(router.urls))
