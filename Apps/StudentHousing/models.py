@@ -32,5 +32,5 @@ class Qualification(models.Model):
 class Service(models.Model):
     name = models.CharField(max_length=1024)
     description = models.CharField(max_length=1024)
-    publication = models.ForeignKey(ResidencePublication, null=False, blank=False, on_delete=models.CASCADE)
+    publication = models.ManyToManyField(ResidencePublication)
 
