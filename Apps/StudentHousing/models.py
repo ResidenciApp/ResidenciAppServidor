@@ -46,8 +46,8 @@ class Report(models.Model):
 
 class Message(models.Model):
     content = models.CharField(max_length=255)
-    transmitter = models.ForeignKey(People, null=False, blank=False, on_delete=models.CASCADE)
-    receiver = models.ForeignKey(People, null=False, blank=False, on_delete=models.CASCADE)
+    transmitter = models.ForeignKey(People, null=False, blank=False, on_delete=models.CASCADE,related_name="message_transmitter")
+    receiver = models.ForeignKey(People, null=False, blank=False, on_delete=models.CASCADE, related_name="message_receiver")
 
 class Promotion(models.Model):
     description = models.CharField(max_length=255)
