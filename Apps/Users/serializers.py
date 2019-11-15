@@ -26,22 +26,24 @@ class RoleSerializers(serializers.ModelSerializer):
         )
 
 
+class UserSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('__all__')
+
+
 class PeopleSerializers(serializers.ModelSerializer):
     role = RoleSerializers(read_only=True)
     
     owner = OwnerSerializers(read_only=True)
+
+    user = UserSerializers(read_only=True)
 
     class Meta:
         # Modelo al que hace referencia
         model = People
 
         # Que campos quiero visualizar
-        fields = ('__all__')
-
-
-class UserSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = User
         fields = ('__all__')
 
 
