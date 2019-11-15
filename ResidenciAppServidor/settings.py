@@ -138,9 +138,10 @@ CORS_ALLOW_METHODS = [
 ]
 
 # Cuando la app en Producción
-# CORS_ORIGIN_WHITELIST = (
-#    'localhost:3000',
-# )
+CORS_ORIGIN_WHITELIST = (
+   'http://localhost:3000',
+   'https://residenciapp-api.herokuapp.com',
+)
 
 # CORS_ORIGIN_ALLOW_ALL: Cuando la app esta en Desarrollo
 CORS_ORIGIN_ALLOW_ALL = True
