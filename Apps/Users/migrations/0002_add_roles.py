@@ -4,7 +4,7 @@ from django.db import migrations, models
 
 # https://stackoverflow.com/a/39742847/3627387
 
-def combine_names(apps, schema_editor):
+def add_roles(apps, schema_editor):
 
     Role = apps.get_model("Users", "Role")
 
@@ -21,9 +21,9 @@ def combine_names(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('Users', '0002_auto_20191024_2235'),
+        ('Users', '0001_initial'),
     ]
 
     operations = [
-        migrations.RunPython(combine_names),
+        migrations.RunPython(add_roles),
     ]
