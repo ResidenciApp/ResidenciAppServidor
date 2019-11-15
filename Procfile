@@ -1,1 +1,1 @@
-web: gunicorn ResidenciAppServidor.settings
+web: gunicorn ResidenciAppServidor.wsgi
