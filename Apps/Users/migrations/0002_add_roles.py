@@ -25,5 +25,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(combine_names),
+        migrations.RunPython(add_roles),
     ]
