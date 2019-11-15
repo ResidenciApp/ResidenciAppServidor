@@ -33,6 +33,18 @@ class PeopleView(viewsets.ModelViewSet):
     queryset = People.objects.all().select_related('role')
     serializer_class = PeopleSerializers
 
+
+    # GET: /api/v1/users/people/?username=
+    def list(self, request):
+        # username: request.query_params['username']
+        user = User.objects.filter(username=request.query_params['username'])
+        people = People.objects.select_related("user").filter(user_id=user[0].id)
+
+        serializer = PeopleSerializers(people, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK) 
+
+
     # POST: /api/v1/users/people/
     def create(self, request):
         # Este Metodo recibe los Datos de la persona y guarda el registro en la BD
