@@ -28,6 +28,12 @@ class RoleView(viewsets.ModelViewSet):
     queryset = Role.objects.all()
     serializer_class = RoleSerializers
 
+class PeopleTestView(viewsets.ModelViewSet):
+    queryset = People.objects.filter(owner_id=Owner.objects.all()[0])
+
+
+    serializer_class = PeopleSerializers
+
 
 class PeopleView(viewsets.ModelViewSet):
     queryset = People.objects.all().select_related('role')
@@ -37,12 +43,18 @@ class PeopleView(viewsets.ModelViewSet):
     # GET: /api/v1/users/people/?username=
     def list(self, request):
         # username: request.query_params['username']
-        user = User.objects.filter(username=request.query_params['username'])
-        people = People.objects.select_related("user").filter(user_id=user[0].id)
+        if request.query_params.get('username'):
 
-        serializer = PeopleSerializers(people, many=True)
+            user = User.objects.filter(username=request.query_params['username'])
+            people = People.objects.select_related("user").filter(user_id=user[0].id)
 
-        return Response(serializer.data, status=status.HTTP_200_OK) 
+            serializer = PeopleSerializers(people, many=True)
+
+            return Response(serializer.data, status=status.HTTP_200_OK) 
+        else:
+            people = People.objects.all()
+            serializer = PeopleSerializers(people, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK) 
 
 
     # POST: /api/v1/users/people/
