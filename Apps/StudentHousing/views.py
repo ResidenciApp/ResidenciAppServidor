@@ -1,8 +1,14 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+
 from .serializers import *
 from .models import *
 from Apps.Users.models import *
+
+from django.contrib.auth.models import User
+from Apps.Users.models import People, Owner
+
 # Create your views here.
 
 class ResidencePublicationView(viewsets.ModelViewSet):
@@ -12,34 +18,63 @@ class ResidencePublicationView(viewsets.ModelViewSet):
     def create(self, request):
         data = request.data
 
+        print(data)
+
         # request.data: Tiene el siguiente diccionario de datos
-    # {
-    #   "idResidence" : "",
-    #   "name" : "",
-    #   "photo": 1,
-    #   "value": "",
-    #   "address": "",
-    #   "rules": 1,
-    #   "neighborhood": 1,
-    #   "locality": 1,
-    #   "owner": 1
-    # }
+        # {
+        #   owner: string,
+        #   name: string,
+        #   price: integer,
+        #   address: string,
+        #   locality: integer id,
+        #   services: ids list,
+        #   description: string,
+        #   city: integer id,
+        #   rules: string,
+        #   photo: string 
+        # }
 
-       #neighborhood = Neighborhood.objects.get(id=request.data.get('idNeighborhood'))
-        owner=Owner.objects.get(id=request.data.get('owner'))
-        #locality = Locality.objects.get(id=request.data.get('locality'))
+        # Buscar un propietario en la base de datos
+        user = User.objects.filter(username=request.data.get('owner'))[0]
 
+        # Validación
+        if user is None:
+            return Response({'status': 400, 'message': 'USERNAME_DONT_EXIST'})
+
+        # Buscar los datos del usuario, asociados al propietario
+        people = People.objects.select_related("user").filter(user_id=user.id)[0]
+
+        # Validación
+        if people is None or people.owner is None:
+            return Response({'status': 400, 'message': 'OWNER_DONT_EXIST'})
+
+        # Registrar residencia
         residence = ResidencePublication(
-            name=request.data.get('residenceName'),
+            name=request.data.get('name'),
             photo=request.data.get('photo'),
-            value=request.data.get('value'),
+            price=request.data.get('price'),
             address=request.data.get('address'),
-            owner=owner,
-            #neighborhood = heighborhood,
-            #locality = locality
+            rules=request.data.get('rules'),
+            locality = request.data.get('locality'),
+            neighborhood = '',
+            owner=people.owner
         )
-
+        # Guardar el registro
         residence.save()
+
+        
+        servicesArr =  request.data.get('services')
+
+        # Registar los servicios asociados a la recidencia
+        for index in range(len(servicesArr)):
+            service = Service.objects.get(id=servicesArr[index])
+            service.publication.add(residence)
+            service.save()
+        
+        # Respuesta Positiva
+        return Response({'status': 201, 'message': 'OK'}, status=status.HTTP_201_CREATED)
+
+
 
 class CommentView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
