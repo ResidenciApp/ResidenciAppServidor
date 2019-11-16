@@ -74,6 +74,26 @@ class ResidencePublicationView(viewsets.ModelViewSet):
         # Respuesta Positiva
         return Response({'status': 201, 'message': 'OK'}, status=status.HTTP_201_CREATED)
 
+from requests import post
+
+class UploadPhotoView(viewsets.ModelViewSet):
+    queryset = ResidencePublication.objects.all()
+    serializer_class = ResidencePublicationSerializers
+
+    def create(self, request):
+        url = "https://api.imgbb.com/1/upload"
+
+        payload = {
+            "key": 'd853d7157ae198506590c3305ed90fe0',
+            "image": request.data.get('file').split('base64,')[1],
+        }
+        res = post(url, payload)
+
+        data = res.json()
+
+        url = data.get('data').get('url')
+
+        return Response({'status': 201, 'message': 'OK', 'url': url }, status=status.HTTP_201_CREATED)
 
 
 class CommentView(viewsets.ModelViewSet):
