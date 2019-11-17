@@ -28,6 +28,9 @@ router.register('report', ReportView, base_name='report')
 # api/v1/users/promotion/
 router.register('promotion', PromotionView, base_name='promotion')
 
+# api/v1/users/upload-photo-residence/
+router.register('upload-photo-residence', UploadPhotoView, base_name='upload-photo-residence')
+
 urlpatterns = [
     # api/v1/users/
     path('', include(router.urls))
