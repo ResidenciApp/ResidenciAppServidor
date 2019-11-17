@@ -102,18 +102,23 @@ class UploadPhotoView(viewsets.ModelViewSet):
     serializer_class = ResidencePublicationSerializers
 
     def create(self, request):
+        # Url del servicio para guardar imagenes
         url = "https://api.imgbb.com/1/upload"
 
+        # Body: key de la api y la imagen a guardar
         payload = {
             "key": 'd853d7157ae198506590c3305ed90fe0',
             "image": request.data.get('file').split('base64,')[1],
         }
+        # Se realiza la peticion
         res = post(url, payload)
-
+        # pasar la respuesta a formato json
         data = res.json()
 
+        # Obtener la url de la respuesta
         url = data.get('data').get('url')
 
+        # Responder con el estatus y la url
         return Response({'status': 201, 'message': 'OK', 'url': url }, status=status.HTTP_201_CREATED)
 
 
@@ -143,15 +148,18 @@ class NotificationView(viewsets.ModelViewSet):
         #   "people" = id
 
         # }
+        # Buscar persona de la Base de datos
         people=People.objects.get(id=request.data.get('people'))
+        # Buscar la publicacion en la Base de Datos
         publication=ResidencePublication.objects.get(id=request.data.get('publication'))
 
+        # Crear el registro de notificacion asociando la persona y la publicacion de residencia
         notification = Notification(
             description= request.data.get('description'),
             person = people,
             publication = publication
         )
-
+        # Guardar la notificacion
         notification.save()
         return Response({'status': 201, 'message': 'OK'}, status=status.HTTP_201_CREATED)
 

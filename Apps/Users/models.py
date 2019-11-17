@@ -35,7 +35,7 @@ from django.contrib.auth.models import User
 # https://django.readthedocs.io/en/latest/topics/auth/customizing.html#extending-the-existing-user-model
 
 class People(models.Model):
-    # Hereda los Siguiente Atributos de el modelo User
+    # 'User' tiene los siguiente argumentos
     # username
     # first_name
     # last_name
