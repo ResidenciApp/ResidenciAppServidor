@@ -15,6 +15,7 @@ from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 
 # Local
+from Apps.StudentHousing.models import ResidencePublication
 from Apps.Users.models import People, Role, Owner
 from Apps.Users.serializers import PeopleSerializers
 from Apps.Users.models import *
@@ -75,5 +76,71 @@ class PruebaSH(APITestCase):
 
         response = self.client.post('/api/v1/student_housing/residence_publication/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+class NotificationTesting(APITestCase):
+
+    def test_notif(self):
+        data = {
+            "description" : "Nueva Notificacion",
+            "publication" : 1,
+            "people" : 1
+        }
+
+        owner = Owner(
+            documentNumber=123456,
+            documentType='CC'
+        )
+        owner.save()
+
+        role = Role.objects.get(id=3)
+
+        # Crear el registro de Usuario
+        user = User.objects.create_user(
+            username='test username',
+            is_superuser=False,
+            first_name='test first name',
+            last_name='test last name',
+            email='test@email.com',
+            is_staff=False,
+            is_active=True
+        )
+        # Se encripta la contraseña
+        user.set_password('test password')
+
+        # Guardar Registro User
+        user.save()
+
+        people = People(
+            age=1,
+            avatar='test avatar',
+            role=role,
+            sex='O',
+            user=user,
+            owner=owner
+        )
+
+
+        # Guardar la Persona
+        people.save()
+
+        # Registrar residencia
+        residence = ResidencePublication(
+            name='name',
+            photo='url',
+            price=1234,
+            address='Calle ...',
+            rules='rules ...',
+            locality=12,
+            neighborhood='',
+            owner=owner
+        )
+        # Guardar el registro
+        residence.save()
+
+        response = self.client.post('/api/v1/student_housing/notification/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+
 
 

@@ -92,6 +92,28 @@ class NotificationView(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializers
 
+    def create(self, request):
+        data = request.data
+
+        # request.data: Tiene el siguiente diccionario de datos
+        # {
+        #   "description" = string
+        #   "publication" = id
+        #   "people" = id
+
+        # }
+        people=People.objects.get(id=request.data.get('people'))
+        publication=ResidencePublication.objects.get(id=request.data.get('publication'))
+
+        notification = Notification(
+            description= request.data.get('description'),
+            person = people,
+            publication = publication
+        )
+
+        notification.save()
+        return Response({'status': 201, 'message': 'OK'}, status=status.HTTP_201_CREATED)
+
 class ReportView(viewsets.ModelViewSet):
     queryset = Report.objects.all()
     serializer_class = ReportSerializers
