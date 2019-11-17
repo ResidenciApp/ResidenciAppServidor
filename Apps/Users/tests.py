@@ -21,6 +21,8 @@ from Apps.Users.models import Role
 class UserSignUp(APITestCase):
     
     def test_signup(self):
+        # Dicionario de datos con los datos necesarios para hacer el registro de una persona
+        # en la Base de Datos
         data = {
             'name': 'testCase name',
             'lastName': 'testCase lastname',
@@ -33,8 +35,9 @@ class UserSignUp(APITestCase):
             'role': 1, # Role 1 ==> Usuario
             'sex': 'O'
         }
-
+        # Se hace la peticion enviando los datos
         response = self.client.post('/api/v1/users/people/', data, format='json')
+        # Verificar que la peticion sea exitosa
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -61,6 +64,7 @@ class TokenAuthentication(APITestCase):
         # Guardar Registro User
         self.user.save()
 
+        # Regisarar una persona
         self.people = People(
             age=1,
             avatar='test avatar',
@@ -72,8 +76,9 @@ class TokenAuthentication(APITestCase):
         # Guardar la Persona
         self.people.save()
 
+        # Pedir un token asociado al usuario que se creo
         self.token = Token.objects.create(user=self.user)
-
+        # Ejecutar la autenticacion
         self.api_authentication()
 
     def api_authentication(self):
@@ -81,6 +86,7 @@ class TokenAuthentication(APITestCase):
 
 
     def test_token_authentication(self):
+        # Se ejecuta el test
         response = self.client.get(self.list_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
