@@ -95,6 +95,27 @@ class UploadPhotoView(viewsets.ModelViewSet):
 
         return Response({'status': 201, 'message': 'OK', 'url': url }, status=status.HTTP_201_CREATED)
 
+from requests import post
+
+class UploadPhotoView(viewsets.ModelViewSet):
+    queryset = ResidencePublication.objects.all()
+    serializer_class = ResidencePublicationSerializers
+
+    def create(self, request):
+        url = "https://api.imgbb.com/1/upload"
+
+        payload = {
+            "key": 'd853d7157ae198506590c3305ed90fe0',
+            "image": request.data.get('file').split('base64,')[1],
+        }
+        res = post(url, payload)
+
+        data = res.json()
+
+        url = data.get('data').get('url')
+
+        return Response({'status': 201, 'message': 'OK', 'url': url }, status=status.HTTP_201_CREATED)
+
 
 class CommentView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
@@ -111,6 +132,28 @@ class ServiceView(viewsets.ModelViewSet):
 class NotificationView(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializers
+
+    def create(self, request):
+        data = request.data
+
+        # request.data: Tiene el siguiente diccionario de datos
+        # {
+        #   "description" = string
+        #   "publication" = id
+        #   "people" = id
+
+        # }
+        people=People.objects.get(id=request.data.get('people'))
+        publication=ResidencePublication.objects.get(id=request.data.get('publication'))
+
+        notification = Notification(
+            description= request.data.get('description'),
+            person = people,
+            publication = publication
+        )
+
+        notification.save()
+        return Response({'status': 201, 'message': 'OK'}, status=status.HTTP_201_CREATED)
 
 class ReportView(viewsets.ModelViewSet):
     queryset = Report.objects.all()
