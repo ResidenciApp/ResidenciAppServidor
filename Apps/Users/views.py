@@ -28,12 +28,6 @@ class RoleView(viewsets.ModelViewSet):
     queryset = Role.objects.all()
     serializer_class = RoleSerializers
 
-class PeopleTestView(viewsets.ModelViewSet):
-    queryset = People.objects.filter(owner_id=Owner.objects.all()[0])
-
-
-    serializer_class = PeopleSerializers
-
 
 class PeopleView(viewsets.ModelViewSet):
     queryset = People.objects.all().select_related('role')
