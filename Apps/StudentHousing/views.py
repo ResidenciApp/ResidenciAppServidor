@@ -57,7 +57,8 @@ class ResidencePublicationView(viewsets.ModelViewSet):
             rules=request.data.get('rules'),
             locality = request.data.get('locality'),
             neighborhood = '',
-            owner=people.owner
+            owner=people.owner,
+            description=request.data.get('description')
         )
         # Guardar el registro
         residence.save()

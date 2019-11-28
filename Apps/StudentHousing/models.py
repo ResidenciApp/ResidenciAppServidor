@@ -12,6 +12,9 @@ class ResidencePublication(models.Model):
 
     # TODO: Cuando Vladimir haya creado el modelo 'neighborhood' y 'locality'
     # de la App 'Location' Hacer las relaciones
+
+    description = models.CharField(max_length=2048, null=True, blank=True)
+
     neighborhood = models.CharField(max_length=255)
     locality = models.CharField(max_length=16)
 
