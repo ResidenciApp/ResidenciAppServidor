@@ -3,6 +3,14 @@ from Apps.Users.models import People
 from Apps.Users.models import Owner
 
 
+class Service(models.Model):
+    name = models.CharField(max_length=1024)
+    description = models.CharField(max_length=1024)
+
+    def __str__(self):
+        return self.name
+
+
 class ResidencePublication(models.Model):
     name = models.CharField(max_length=255)
     photo = models.CharField(max_length=255)
@@ -20,6 +28,11 @@ class ResidencePublication(models.Model):
 
     owner = models.ForeignKey(Owner, null=False, blank=False, on_delete=models.CASCADE)
 
+    services = models.ManyToManyField(Service)
+
+    def __str__(self):
+        return self.name
+
 class Comment(models.Model):
     content = models.CharField(max_length=255)
     publication = models.ForeignKey(ResidencePublication, null=False, blank=False, on_delete=models.CASCADE)
@@ -31,11 +44,6 @@ class Qualification(models.Model):
     publication = models.ForeignKey(ResidencePublication, null=False, blank=False, on_delete=models.CASCADE)
     person = models.ForeignKey(People, null=False, blank=False, on_delete=models.CASCADE)
 
-
-class Service(models.Model):
-    name = models.CharField(max_length=1024)
-    description = models.CharField(max_length=1024)
-    publication = models.ManyToManyField(ResidencePublication)
 
 class Notification(models.Model):
     description = models.CharField(max_length=255)
