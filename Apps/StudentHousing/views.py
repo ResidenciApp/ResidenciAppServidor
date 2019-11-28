@@ -11,10 +11,31 @@ from Apps.Users.models import People, Owner
 
 # Create your views here.
 
+# path: api/v1/users/residencePublication/
 class ResidencePublicationView(viewsets.ModelViewSet):
     queryset = ResidencePublication.objects.all()
     serializer_class = ResidencePublicationSerializers
 
+    # GET: api/v1/users/residencePublication/?id=<number>
+    def list(self, request):
+        if request.query_params.get('id'):
+            residence = ResidencePublication\
+                .objects\
+                .filter(id=request.query_params.get('id'))\
+                .prefetch_related('services')
+
+            if(len(residence) >= 1):
+                serializer = ResidencePublicationSerializers(residence[0], many=False)
+            else:
+                serializer = ResidencePublicationSerializers(residence, many=False)
+
+            return Response(serializer.data, status=status.HTTP_200_OK) 
+        else:
+            residence = ResidencePublication.objects.all()
+            serializer = ResidencePublicationSerializers(residence, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # POST: api/v1/users/residencePublication/
     def create(self, request):
         data = request.data
 
@@ -57,7 +78,8 @@ class ResidencePublicationView(viewsets.ModelViewSet):
             rules=request.data.get('rules'),
             locality = request.data.get('locality'),
             neighborhood = '',
-            owner=people.owner
+            owner=people.owner,
+            description=request.data.get('description')
         )
         # Guardar el registro
         residence.save()
@@ -68,8 +90,8 @@ class ResidencePublicationView(viewsets.ModelViewSet):
         # Registar los servicios asociados a la recidencia
         for index in range(len(servicesArr)):
             service = Service.objects.get(id=servicesArr[index])
-            service.publication.add(residence)
-            service.save()
+            residence.services.add(service)
+            residence.save()
         
         # Respuesta Positiva
         return Response({'status': 201, 'message': 'OK'}, status=status.HTTP_201_CREATED)

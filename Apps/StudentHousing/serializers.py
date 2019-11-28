@@ -1,7 +1,16 @@
 from rest_framework import serializers
 from .models import *
 
+
+class ServiceSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = ('__all__')
+    
 class ResidencePublicationSerializers(serializers.ModelSerializer):
+
+    services = ServiceSerializers(read_only=True, many=True)
+
     class Meta:
         model = ResidencePublication
         fields = ('__all__')
@@ -15,11 +24,6 @@ class QualificationSerializers(serializers.ModelSerializer):
     class Meta:
         model = Qualification
 
-        fields = ('__all__')
-
-class ServiceSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = Service
         fields = ('__all__')
 
 class NotificationSerializers(serializers.ModelSerializer):
