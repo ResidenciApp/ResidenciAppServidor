@@ -1,6 +1,9 @@
 from django.shortcuts import render
+from django.db.models import Q
+
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .serializers import *
 from .models import *
@@ -11,7 +14,7 @@ from Apps.Users.models import People, Owner
 
 # Create your views here.
 
-# path: api/v1/users/residencePublication/
+# path: api/v1/student_housing/residence_publication/
 class ResidencePublicationView(viewsets.ModelViewSet):
     queryset = ResidencePublication.objects.all()
     serializer_class = ResidencePublicationSerializers
@@ -143,6 +146,38 @@ class UploadPhotoView(viewsets.ModelViewSet):
         # Responder con el estatus y la url
         return Response({'status': 201, 'message': 'OK', 'url': url }, status=status.HTTP_201_CREATED)
 
+
+class Search(APIView):
+
+    def get(self, request, format=None):
+        return Response([])
+
+    def post(self, request, format=None):
+        print(request.data)
+
+        data = request.data
+
+        dataResponse = []
+
+        if data.get('name') == '' or data.get('name') == ' ':
+            dataResponse = ResidencePublication.objects.filter(
+                (
+                    Q(price__gte=int(data.get('MinPrice'))) &
+                    Q(price__lte=int(data.get('MaxPrice')))
+                )
+            )
+        else:
+            dataResponse = ResidencePublication.objects.filter(
+                Q(name__contains=data.get('name')) |
+                (
+                    Q(price__gte=int(data.get('MinPrice'))) &
+                    Q(price__lte=int(data.get('MaxPrice')))
+                )
+            )
+
+        serializer = ResidencePublicationSerializers(dataResponse, many=True)
+
+        return Response({"message": "received", "data": serializer.data})
 
 class CommentView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
