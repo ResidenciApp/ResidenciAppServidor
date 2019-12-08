@@ -33,5 +33,6 @@ router.register('upload-photo-residence', UploadPhotoView, base_name='upload-pho
 
 urlpatterns = [
     # api/v1/users/
+    path('search', Search.as_view()),
     path('', include(router.urls))
 ]
