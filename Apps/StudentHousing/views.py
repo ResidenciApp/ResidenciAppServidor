@@ -191,6 +191,10 @@ class ServiceView(viewsets.ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializers
 
+class LocationView(viewsets.ModelViewSet):
+    queryset = Service.objects.all()
+    serializer_class = ServiceSerializers
+
 class NotificationView(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializers
