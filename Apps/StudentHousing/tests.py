@@ -20,6 +20,7 @@ from Apps.Users.models import People, Role, Owner
 from Apps.Users.serializers import PeopleSerializers
 from Apps.Users.models import *
 from _markupbase import *
+from .models import *
 
 class PruebaSH(APITestCase):
 
@@ -123,16 +124,24 @@ class NotificationTesting(APITestCase):
         # Guardar la Persona
         people.save()
 
+        location = Location(
+            city='Bogotá D.C.',
+            neighborhood='',
+            locality='Teusaquillo',
+            address='Calle 39 N° 45 - 85'
+        )
+
+        location.save()
+
         # Registrar residencia
         residence = ResidencePublication(
             name='name',
             photo='url',
             price=1234,
-            address='Calle ...',
             rules='rules ...',
-            locality=12,
-            neighborhood='',
-            owner=owner
+            owner=owner,
+            description='description ...',
+            location=location
         )
         # Guardar el registro
         residence.save()

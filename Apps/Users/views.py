@@ -56,7 +56,7 @@ class PeopleView(viewsets.ModelViewSet):
         # Este Metodo recibe los Datos de la persona y guarda el registro en la BD
 
         # Debug
-        print(request.data)
+        # print(request.data)
 
         # Ejemplo: request.data
         # {
