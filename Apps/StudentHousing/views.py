@@ -50,10 +50,10 @@ class ResidencePublicationView(viewsets.ModelViewSet):
         #   name: string,
         #   price: integer,
         #   address: string,
-        #   locality: integer id,
+        #   locality: string,
         #   services: ids list,
         #   description: string,
-        #   city: integer id,
+        #   city: string,
         #   rules: string,
         #   photo: string 
         # }
@@ -72,21 +72,27 @@ class ResidencePublicationView(viewsets.ModelViewSet):
         if people is None or people.owner is None:
             return Response({'status': 400, 'message': 'OWNER_DONT_EXIST'})
 
+
+        location = Location(
+            city=request.data.get('city'),
+            neighborhood='',
+            locality=request.data.get('locality'),
+            address=request.data.get('address')
+        )
+        location.save()
+
         # Registrar residencia
         residence = ResidencePublication(
             name=request.data.get('name'),
             photo=request.data.get('photo'),
             price=request.data.get('price'),
-            address=request.data.get('address'),
             rules=request.data.get('rules'),
-            locality = request.data.get('locality'),
-            neighborhood = '',
             owner=people.owner,
-            description=request.data.get('description')
+            description=request.data.get('description'),
+            location=location
         )
         # Guardar el registro
         residence.save()
-
         
         servicesArr =  request.data.get('services')
 
@@ -119,33 +125,6 @@ class UploadPhotoView(viewsets.ModelViewSet):
         url = data.get('data').get('url')
 
         return Response({'status': 201, 'message': 'OK', 'url': url }, status=status.HTTP_201_CREATED)
-
-from requests import post
-
-class UploadPhotoView(viewsets.ModelViewSet):
-    queryset = ResidencePublication.objects.all()
-    serializer_class = ResidencePublicationSerializers
-
-    def create(self, request):
-        # Url del servicio para guardar imagenes
-        url = "https://api.imgbb.com/1/upload"
-
-        # Body: key de la api y la imagen a guardar
-        payload = {
-            "key": 'd853d7157ae198506590c3305ed90fe0',
-            "image": request.data.get('file').split('base64,')[1],
-        }
-        # Se realiza la peticion
-        res = post(url, payload)
-        # pasar la respuesta a formato json
-        data = res.json()
-
-        # Obtener la url de la respuesta
-        url = data.get('data').get('url')
-
-        # Responder con el estatus y la url
-        return Response({'status': 201, 'message': 'OK', 'url': url }, status=status.HTTP_201_CREATED)
-
 
 class Search(APIView):
 
@@ -192,8 +171,8 @@ class ServiceView(viewsets.ModelViewSet):
     serializer_class = ServiceSerializers
 
 class LocationView(viewsets.ModelViewSet):
-    queryset = Service.objects.all()
-    serializer_class = ServiceSerializers
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializers
 
 class NotificationView(viewsets.ModelViewSet):
     queryset = Notification.objects.all()

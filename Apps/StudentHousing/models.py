@@ -11,6 +11,13 @@ class Service(models.Model):
         return self.name
 
 
+class Location(models.Model):
+    city = models.CharField(max_length=255)
+    neighborhood = models.CharField(max_length=255)
+    locality = models.CharField(max_length=255)
+    address = models.CharField(max_length=64)
+
+
 class ResidencePublication(models.Model):
     name = models.CharField(max_length=255)
     photo = models.CharField(max_length=255)
@@ -19,6 +26,7 @@ class ResidencePublication(models.Model):
     description = models.CharField(max_length=2048, null=True, blank=True)
     owner = models.ForeignKey(Owner, null=False, blank=False, on_delete=models.CASCADE)
     services = models.ManyToManyField(Service)
+    location = models.OneToOneField(Location, null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -44,13 +52,6 @@ class Report(models.Model):
     reportType = models.CharField(max_length=255) #No se si este sea el tipo de Reporte
     publication = models.ForeignKey(ResidencePublication, null=False, blank=False, on_delete=models.CASCADE)
     person = models.ForeignKey(People, null=False, blank=False, on_delete=models.CASCADE)
-
-class Location(models.Model):
-    city = models.CharField(max_length=255)
-    neighborhood = models.CharField(max_length=255)
-    locality = models.CharField(max_length=16)
-    address = models.CharField(max_length=64)
-    publication = models.OneToOneField(ResidencePublication, null=False, blank=False, on_delete=models.CASCADE)
 
 
 class Message(models.Model):

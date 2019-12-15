@@ -6,10 +6,17 @@ class ServiceSerializers(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = ('__all__')
-    
+
+class LocationSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = ('__all__')
+
+
 class ResidencePublicationSerializers(serializers.ModelSerializer):
 
     services = ServiceSerializers(read_only=True, many=True)
+    location = LocationSerializers(read_only=True)
 
     class Meta:
         model = ResidencePublication
@@ -46,7 +53,3 @@ class PromotionSerializers(serializers.ModelSerializer):
         model = Promotion
         fields = ('__all__')
 
-class LocationSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = Location
-        fields = ('  all  ')
