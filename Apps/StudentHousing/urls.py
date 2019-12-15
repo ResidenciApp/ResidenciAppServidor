@@ -22,6 +22,9 @@ router.register('notification', NotificationView, base_name='notification')
 # api/v1/users/message/
 router.register('message', MessageView, base_name='message')
 
+#api/v1/users/location/
+router.register('location', LocationView, base_name='location')
+
 # api/v1/users/report/
 router.register('report', ReportView, base_name='report')
 

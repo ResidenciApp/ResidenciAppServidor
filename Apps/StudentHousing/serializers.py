@@ -45,3 +45,8 @@ class PromotionSerializers(serializers.ModelSerializer):
     class Meta:
         model = Promotion
         fields = ('__all__')
+
+class LocationSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = ('  all  ')
