@@ -42,7 +42,7 @@ class ResidencePublicationView(viewsets.ModelViewSet):
     def create(self, request):
         data = request.data
 
-        print(data)
+        # print(data)
 
         # request.data: Tiene el siguiente diccionario de datos
         # {
@@ -132,7 +132,7 @@ class Search(APIView):
         return Response([])
 
     def post(self, request, format=None):
-        print(request.data)
+        # print(request.data)
 
         data = request.data
 
