@@ -82,9 +82,9 @@ WSGI_APPLICATION = 'ResidenciAppServidor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'testdbs',
-        'USER': 'postgres',
-        'PASSWORD': 'acustico',
+        'NAME': 'residenciApp',
+        'USER': 'admin',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': 5432,
     }
