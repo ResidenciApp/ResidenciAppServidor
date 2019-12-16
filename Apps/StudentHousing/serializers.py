@@ -53,3 +53,8 @@ class PromotionSerializers(serializers.ModelSerializer):
         model = Promotion
         fields = ('__all__')
 
+class AverageView(serializers.ModelSerializer):
+    class Meta:
+        model = AverageView
+        fields = ('__all__')
+

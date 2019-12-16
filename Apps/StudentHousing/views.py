@@ -214,3 +214,7 @@ class MessageView(viewsets.ModelViewSet):
 class PromotionView(viewsets.ModelViewSet):
     queryset = Promotion.objects.all()
     serializer_class = PromotionSerializers
+
+class AverageView(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializers

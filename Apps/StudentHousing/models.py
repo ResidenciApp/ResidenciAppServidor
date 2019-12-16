@@ -62,3 +62,6 @@ class Message(models.Model):
 class Promotion(models.Model):
     description = models.CharField(max_length=255)
     publication = models.ForeignKey(ResidencePublication, null=False, blank=False, on_delete=models.CASCADE)
+
+class AverageView(models.Model):
+    description = models.CharField(max_length=255)
